@@ -1,13 +1,21 @@
 const axios = require('axios'); // Import the Axios library
+let config;
+if(process.env.NODE_ENV === 'production') {
+  // We are running in production mode
+  config = require('./config/prod.json');
 
-function searchBooks(searchTerm) {
+} else {
+ // We are running in development mode
+  config = require('./config/stage.json');
+}
+exports.searchBooks = (searchTerm) => {
   // Your Google Books API key (replace with your own)
-  const apiKey = 'YOUR_API_KEY';
+  const googleBooksApiKey = config.googleBooksApiKey;
 
   // URL for the Google Books API
   const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
     searchTerm
-  )}&key=${apiKey}`;
+  )}&key=${googleBooksApiKey}`;
 
   // Send a GET request to the API using Axios
   axios
